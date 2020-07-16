@@ -1,11 +1,16 @@
+import os
 import re
 from googletrans import Translator
 import codecs
 
 file = open("strings.xml", "r") # Source File
-resultFile = codecs.open("resultFile.xml", "w","utf-8") # Result File
 baseLanguageCode="en"
 resultLanguageCode="tr"
+resultPath="values-"+resultLanguageCode
+if not os.path.exists(resultPath):
+    os.mkdir(resultPath)
+resultFile = codecs.open(resultPath+"/string.xml", "w","utf-8") # Result File
+
 translator = Translator()
 
 for f in file:
@@ -19,7 +24,7 @@ for f in file:
             res=res.replace("xliff: g","xliff:g")
         resultFile.writelines(res) # Write Text in Result File
     else:
-        resultFile.writelines(f) 
+        resultFile.writelines(f)
 
 """
 Afrikaans => af
