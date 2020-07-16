@@ -5,13 +5,15 @@ import codecs
 
 file = open("strings.xml", "r") # Source File
 baseLanguageCode="en"
-resultLanguageCode="tr"
+resultLanguageCode="sr"
 resultPath="values-"+resultLanguageCode
 if not os.path.exists(resultPath):
     os.mkdir(resultPath)
-resultFile = codecs.open(resultPath+"/string.xml", "w","utf-8") # Result File
+resultFile = codecs.open(resultPath+"/strings.xml", "w","utf-8") # Result File
 
 translator = Translator()
+
+print("......... TRANSLATING .........")
 
 for f in file:
     if "<string name" in f:
@@ -20,11 +22,15 @@ for f in file:
         res=f.replace(result.group(1),a.text)
         if "% 1 $ " in res:
             res=res.replace("% 1 $ "," %1$")
+        if "% 2 $ " in res:
+            res=res.replace("% 2 $ "," %2$")
         if "xliff: g" in res:
             res=res.replace("xliff: g","xliff:g")
         resultFile.writelines(res) # Write Text in Result File
     else:
         resultFile.writelines(f)
+
+print("TRANSLATE IS DONE")
 
 """
 Afrikaans => af
