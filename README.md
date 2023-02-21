@@ -71,3 +71,10 @@ Yiddish => yi
 * download python => https://www.python.org/downloads/
 * python3 get-pip.py
 * pip install googletrans==3.1.0a0
+
+
+
+
+
+
+* bir klasörün içine string dosyasını ve py dosyasını koyun. py dosyasına sağ tık->şununla aç->IDLE->üstteki toolbarda RUN->Run Module
