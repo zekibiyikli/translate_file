@@ -67,3 +67,7 @@ Indonesian => id
 Yiddish => yi
 
 
+
+* download python => https://www.python.org/downloads/
+* python3 get-pip.py
+* pip install googletrans==3.1.0a0
