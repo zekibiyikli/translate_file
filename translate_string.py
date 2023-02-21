@@ -5,7 +5,7 @@ import codecs
 
 file = open("strings.xml", "r") # Source File
 baseLanguageCode="en"
-resultLanguageCode="sr"
+resultLanguageCode="fr"
 resultPath="values-"+resultLanguageCode
 if not os.path.exists(resultPath):
     os.mkdir(resultPath)
@@ -16,10 +16,11 @@ translator = Translator()
 print("......... TRANSLATING .........")
 
 for f in file:
-    if "<string name" in f:
-        result = re.search('>(.*)<', f) # Getting String
-        a=translator.translate(result.group(1),src=baseLanguageCode, dest=resultLanguageCode) # Translating String
-        res=f.replace(result.group(1),a.text)
+    if "<string name" in f and "translatable" not in f and "<![CDATA" not in f:
+        result = re.search('>(.*)</string>', f) # Getting String
+        baseword=result.group(1)
+        a=translator.translate(baseword,src=baseLanguageCode, dest=resultLanguageCode) # Translating String
+        res=f.replace(baseword,a.text)
         if "% 1 $ " in res:
             res=res.replace("% 1 $ "," %1$")
         if "% 2 $ " in res:
@@ -27,6 +28,27 @@ for f in file:
         if "xliff: g" in res:
             res=res.replace("xliff: g","xliff:g")
         resultFile.writelines(res) # Write Text in Result File
+    elif "<![CDATA" in f:
+        sub1 = "CDATA["
+        sub2 = "]]"
+        # getting index of substrings
+        idx1 = f.index(sub1)-1
+        idx2 = f.index(sub2)
+        res = ''
+        # getting elements in between
+        for idx in range(idx1 + len(sub1) + 1, idx2):
+            res = res + f[idx]
+        baseword=res
+        a=translator.translate(baseword,src=baseLanguageCode, dest=resultLanguageCode) # Translating String
+        res=f.replace(baseword,a.text)
+        if "% 1 $ " in res:
+            res=res.replace("% 1 $ "," %1$")
+        if "% 2 $ " in res:
+            res=res.replace("% 2 $ "," %2$")
+        if "xliff: g" in res:
+            res=res.replace("xliff: g","xliff:g")
+        resultFile.writelines(res) # Write Text in Result File
+
     else:
         resultFile.writelines(f)
 
